@@ -10,6 +10,8 @@ import mlflow
 import xgboost as xgb
 from prefect import flow, task
 
+TRACKING_URL = "http://175.41.182.223:5050"
+EXPERIMENT_NAME = "nyc-taxi-experiment"
 
 @task(retries=3, retry_delay_seconds=2)
 def read_data(filename: str) -> pd.DataFrame:
@@ -111,14 +113,14 @@ def train_best_model(
 
 @flow
 def main_flow(
-    train_path: str = "./data/green_tripdata_2021-01.parquet",
-    val_path: str = "./data/green_tripdata_2021-02.parquet",
+    train_path: str = "./../data/green_tripdata_2021-01.parquet",
+    val_path: str = "./../data/green_tripdata_2021-02.parquet",
 ) -> None:
     """The main training pipeline"""
 
     # MLflow settings
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
-    mlflow.set_experiment("nyc-taxi-experiment")
+    mlflow.set_tracking_uri(TRACKING_URL)
+    mlflow.set_experiment(EXPERIMENT_NAME)
 
     # Load
     df_train = read_data(train_path)
