@@ -13,6 +13,9 @@ from prefect_aws import S3Bucket
 from prefect.artifacts import create_markdown_artifact
 from datetime import date
 
+S3_BLOCK_NAME = "prefect-general-bucket"
+TRACKING_URL = "http://175.41.182.223:5050"
+EXPERIMENT_NAME = "nyc-taxi-experiment"
 
 @task(retries=3, retry_delay_seconds=2)
 def read_data(filename: str) -> pd.DataFrame:
@@ -124,7 +127,7 @@ def train_best_model(
         """
 
         create_markdown_artifact(
-            key="duration-model-report", markdown=markdown__rmse_report
+            key="green-taxi-duration-training-rmse-report", markdown=markdown__rmse_report
         )
 
     return None
@@ -138,11 +141,11 @@ def main_flow_s3(
     """The main training pipeline"""
 
     # MLflow settings
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
-    mlflow.set_experiment("nyc-taxi-experiment")
+    mlflow.set_tracking_uri(TRACKING_URL)
+    mlflow.set_experiment(EXPERIMENT_NAME)
 
     # Load
-    s3_bucket_block = S3Bucket.load("s3-bucket-block")
+    s3_bucket_block = S3Bucket.load(S3_BLOCK_NAME)
     s3_bucket_block.download_folder_to_path(from_folder="data", to_folder="data")
 
     df_train = read_data(train_path)
