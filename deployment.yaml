@@ -18,7 +18,7 @@ deployments:
   description: "The training pipeline of green taxi duration with s3 data"
   schedule: {}
   flow_name: null
-  entrypoint: 3.5/orchestrate_s3.py:green_taxi_duration_training_with_s3
+  entrypoint: 3.5/orchestrate_s3.py:green_taxi_duration_training_with_s3_data
   parameters: {}
   work_pool: 
     name: zooncamp-work-pool
