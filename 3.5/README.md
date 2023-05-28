@@ -38,5 +38,5 @@ prefect deploy --all
 ```
 
 ```
-prefect deployment run green_taxi_duration_training_with_s3/green-taxi-duration-training-with-s3-data
+prefect deployment run green-taxi-duration-training-with-s3-data/green-taxi-duration-training-with-s3-data
 ```
