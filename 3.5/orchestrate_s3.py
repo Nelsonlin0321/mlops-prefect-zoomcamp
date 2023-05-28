@@ -134,7 +134,7 @@ def train_best_model(
 
 
 @flow
-def main_flow_s3(
+def green_taxi_duration_training_with_s3(
     train_path: str = "./data/green_tripdata_2021-01.parquet",
     val_path: str = "./data/green_tripdata_2021-02.parquet",
 ) -> None:
@@ -159,4 +159,4 @@ def main_flow_s3(
 
 
 if __name__ == "__main__":
-    main_flow_s3()
+    green_taxi_duration_training_with_s3()
