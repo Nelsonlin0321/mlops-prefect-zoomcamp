@@ -121,7 +121,7 @@ def train_best_model(
 
         ## RMSE XGBoost Model
 
-        | Region    | RMSE |
+        | Run Date    | RMSE |
         |:----------|-------:|
         | {date.today()} | {rmse:.2f} |
         """
