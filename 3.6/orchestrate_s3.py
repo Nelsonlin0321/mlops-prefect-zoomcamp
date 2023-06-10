@@ -12,7 +12,21 @@ from prefect import flow, task
 from prefect_aws import S3Bucket
 from prefect.artifacts import create_markdown_artifact
 from datetime import date
+from prefect.context import get_run_context
+from prefect_email import EmailServerCredentials, email_send_message
 
+
+@task()
+def notify_run_by_email():
+    context = get_run_context()
+    flow_run_name = context.flow_run.name
+    email_server_credentials = EmailServerCredentials.load("prefect-email")
+    email_send_message(
+        email_server_credentials=email_server_credentials,
+        subject=f"Flow run: {flow_run_name}",
+        msg=f"Flow run:{flow_run_name}.",
+        email_to=email_server_credentials.username,
+    )
 
 @task(retries=3, retry_delay_seconds=2)
 def read_data(filename: str) -> pd.DataFrame:
@@ -136,6 +150,8 @@ def main_flow_s3(
     val_path: str = "./data/green_tripdata_2021-02.parquet",
 ) -> None:
     """The main training pipeline"""
+    
+    notify_run_by_email()
 
     # MLflow settings
     mlflow.set_tracking_uri("sqlite:///mlflow.db")
