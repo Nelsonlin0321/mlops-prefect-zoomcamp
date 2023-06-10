@@ -12,8 +12,7 @@ from prefect import flow, task
 from prefect_aws import S3Bucket
 from prefect.artifacts import create_markdown_artifact
 from datetime import date
-
-from prefect.context import FlowRunContext
+from prefect.context import get_run_context
 from prefect_email import EmailServerCredentials, email_send_message
 
 S3_BLOCK_NAME = "prefect-general-bucket"
@@ -21,8 +20,7 @@ TRACKING_URL = "http://175.41.182.223:5050"
 EXPERIMENT_NAME = "nyc-taxi-experiment"
 
 @task()
-def notify_run_by_email():
-    context = FlowRunContext()
+def notify_run_by_email(context):
     flow_run_name = context.flow_run.name
     email_server_credentials = EmailServerCredentials.load("prefect-email")
     email_send_message(
@@ -154,8 +152,8 @@ def green_taxi_duration_training_with_s3_data(
     val_path: str = "./data/green_tripdata_2021-02.parquet",
 ) -> None:
     """The main training pipeline"""
-
-    notify_run_by_email()
+    context = get_run_context()
+    notify_run_by_email(context)
     # MLflow settings
     mlflow.set_tracking_uri(TRACKING_URL)
     mlflow.set_experiment(EXPERIMENT_NAME)
