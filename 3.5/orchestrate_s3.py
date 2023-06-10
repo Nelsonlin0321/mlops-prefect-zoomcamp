@@ -152,8 +152,8 @@ def green_taxi_duration_training_with_s3_data(
     val_path: str = "./data/green_tripdata_2021-02.parquet",
 ) -> None:
     """The main training pipeline"""
-    context = get_run_context()
-    notify_run_by_email(context)
+    # context = get_run_context()
+    # notify_run_by_email(context)
     # MLflow settings
     mlflow.set_tracking_uri(TRACKING_URL)
     mlflow.set_experiment(EXPERIMENT_NAME)
