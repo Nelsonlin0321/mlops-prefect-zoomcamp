@@ -19,7 +19,7 @@ S3_BLOCK_NAME = "prefect-general-bucket"
 TRACKING_URL = "http://175.41.182.223:5050"
 EXPERIMENT_NAME = "nyc-taxi-experiment"
 
-@task()
+@task(timeout_seconds=10)
 def notify_run_by_email(context):
     flow_run_name = context.flow_run.name
     email_server_credentials = EmailServerCredentials.load("prefect-email")
