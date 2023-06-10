@@ -13,7 +13,7 @@ from prefect_aws import S3Bucket
 from prefect.artifacts import create_markdown_artifact
 from datetime import date
 
-from prefect.context import get_run_context
+from prefect.context import FlowRunContext
 from prefect_email import EmailServerCredentials, email_send_message
 
 S3_BLOCK_NAME = "prefect-general-bucket"
@@ -22,7 +22,7 @@ EXPERIMENT_NAME = "nyc-taxi-experiment"
 
 @task()
 def notify_run_by_email():
-    context = get_run_context()
+    context = FlowRunContext()
     flow_run_name = context.flow_run.name
     email_server_credentials = EmailServerCredentials.load("prefect-email")
     email_send_message(
